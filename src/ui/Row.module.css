@@ -1,0 +1,10 @@
+.vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
