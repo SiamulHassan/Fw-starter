@@ -11,6 +11,7 @@ export async function getCabins() {
 
 // create cabins
 export async function createCabins(newCabin, id) {
+  //console.log("newCabin:", newCabin);
   // id && console.log("cabinObj+ID:", newCabin, id);
   // console.log("cabinObj:", newCabin);
   // we passed id to know that we are in edit mode
@@ -25,24 +26,25 @@ export async function createCabins(newCabin, id) {
     ? newCabin.image
     : `${supabaseUrl}/storage/v1/object/public/cabins/${imageName}`;
   let query = supabase.from("cabins");
+
   // creating cabins
-  if (!id) query = await query.insert([{ ...newCabin, image: imagePath }]);
-  // editing cabins
-  // const { data, error } = await supabase
-  // .from('cabins')
-  // .update({ other_column: 'otherValue' })
-  // .eq('some_column', 'someValue')
-  // .select()
+  if (!id)
+    query = await query
+      .insert([{ ...newCabin, image: imagePath }])
+      .select()
+      .single();
 
   if (id) {
-    console.log("newcabin", newCabin);
+    //console.log("newcabin", newCabin);
     query = await query
-      .update({ ...newCabin, id: id, image: imagePath })
-      .eq("id", id);
+      .update({ ...newCabin, image: imagePath })
+      .eq("id", id)
+      .select()
+      .single();
   }
 
   const { data, error } = query;
-  console.log("ret data:", data);
+  //console.log("ret data:", data);
   if (error) {
     console.log("cabin crerate errr", error);
     throw new Error("unable to create cabin");

@@ -63,7 +63,14 @@ function CreateCabinForm({ cabinToEddit = {} }) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
     if (fromEditState) {
       editCabin(
-        { newCabinData: { ...data, image: image }, id: cabinToEditID },
+        {
+          newCabinData: {
+            ...data,
+            image: image,
+            created_at: cabinToEddit.created_at,
+          },
+          id: cabinToEditID,
+        },
         {
           onSuccess: () => reset(),
         }
