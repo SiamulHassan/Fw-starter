@@ -27,7 +27,7 @@ const CabinRow = ({ cabin }) => {
   const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isLoading, createCabin } = useCreateCabin();
-  console.log("cabin:", cabin);
+
   const {
     name,
     maxCapacity,
