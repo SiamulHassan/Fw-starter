@@ -52,7 +52,7 @@ function CreateCabinForm({ cabinToEddit = {} }) {
     defaultValues: fromEditState ? otherCabinVal : {},
   });
   // creating a cabin
-  const { isSubmitting, createCabin } = useCreateCabin();
+  const { isLoading: isSubmitting, createCabin } = useCreateCabin();
   // updating a cabin
   const { isEditing, editCabin } = useEditCabin();
 
