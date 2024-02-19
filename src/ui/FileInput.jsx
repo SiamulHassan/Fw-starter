@@ -23,3 +23,4 @@ const FileInput = styled.input`
 `;
 
 export default FileInput;
+// it is difficult to style input file button so impliment label hack

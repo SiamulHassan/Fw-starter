@@ -42,27 +42,40 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { createCabins } from "../../services/apiCabins";
+import { useCreateCabin } from "./useCreateCabin";
+import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm() {
-  const queryClient = useQueryClient();
-  const { register, handleSubmit, reset } = useForm();
-  const { isLoading: isSubmitting, mutate } = useMutation({
-    mutationFn: (newCabin) => createCabins(newCabin),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["cabin"],
-      });
-      toast.success("form submitted successfully !");
-      reset();
-    },
-    onError: (err) => toast.error(err.message),
+function CreateCabinForm({ cabinToEddit = {} }) {
+  const { id: cabinToEditID, ...otherCabinVal } = cabinToEddit;
+  const fromEditState = Boolean(cabinToEditID);
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: fromEditState ? otherCabinVal : {},
   });
+  // creating a cabin
+  const { isSubmitting, createCabin } = useCreateCabin();
+  // updating a cabin
+  const { isEditing, editCabin } = useEditCabin();
+
+  const loadingState = isSubmitting || isEditing;
   const formSubmit = (data) => {
-    //console.log("form data:", data);
-    mutate(data);
+    // console.log("imgH?", data.image[0]);
+    // checking if it is previos img or upload agian editing time
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+    if (fromEditState) {
+      editCabin(
+        { newCabinData: { ...data, image: image }, id: cabinToEditID },
+        {
+          onSuccess: () => reset(),
+        }
+      );
+    } else {
+      createCabin(
+        { ...data, image: image },
+        {
+          onSuccess: () => reset(),
+        }
+      );
+    }
   };
   return (
     <Form onSubmit={handleSubmit(formSubmit)}>
@@ -103,7 +116,12 @@ function CreateCabinForm() {
 
       <FormRow>
         <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
+        <FileInput
+          type="file"
+          id="image"
+          accept="image/*"
+          {...register("image")}
+        />
       </FormRow>
 
       <FormRow>
@@ -115,9 +133,9 @@ function CreateCabinForm() {
           size="btn-large"
           type="btn-primary"
           htmlType={"submit"}
-          disabled={isSubmitting}
+          disabled={loadingState}
         >
-          Edit cabin
+          {fromEditState ? "Edit Cabin" : "Create New Cabin"}
         </Button>
       </FormRow>
     </Form>

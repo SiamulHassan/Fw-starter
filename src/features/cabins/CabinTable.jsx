@@ -1,17 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-// import { getCabins } from "../services/apiCabins";
 import CabinRow from "./CabinRow";
-import { getCabins } from "../../services/apiCabins";
 import styles from "./CabinTable.module.css";
+import { useCabin } from "./useCabin";
 const CabinTable = () => {
-  const {
-    isLoading,
-    data: cabins,
-    error,
-  } = useQuery({
-    queryKey: ["cabin"],
-    queryFn: getCabins,
-  });
+  const { cabins } = useCabin();
   return (
     <div role="table" className={styles.table}>
       <header role="row" className={styles.tableHeader}>

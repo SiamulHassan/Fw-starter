@@ -18,31 +18,34 @@ const Discount = styled.div`
 `;
 import { formatCurrency } from "../../utils/helpers";
 import styles from "./CabinRow.module.css";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabins } from "../../services/apiCabins";
+import CreateCabinForm from "./CreateCabinForm";
+import { useState } from "react";
+import { useDeleteCabin } from "./useDeleteCabin";
 const CabinRow = ({ cabin }) => {
+  const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
   const { name, maxCapacity, regularPrice, discount, image, id } = cabin;
-  const queryClient = useQueryClient();
-  const { isLoading: isDeleting, mutate } = useMutation({
-    mutationFn: (cabinId) => deleteCabins(cabinId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["cabin"],
-      });
-    },
-    onError: (err) => alert(err.message),
-  });
   return (
-    <div role="row" className={styles["table-row"]}>
-      <img src={image} alt="cabin img" className={styles["cabin-img"]} />
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => mutate(id)} disabled={isDeleting}>
-        Delete
-      </button>
-    </div>
+    <>
+      <div role="row" className={styles["table-row"]}>
+        <img src={image} alt="cabin img" className={styles["cabin-img"]} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        {discount ? (
+          <Discount>{formatCurrency(discount)}</Discount>
+        ) : (
+          <span>&mdash;</span>
+        )}
+        <div>
+          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
+          <button onClick={() => deleteCabin(id)} disabled={isDeleting}>
+            Delete
+          </button>
+        </div>
+      </div>
+      {showForm && <CreateCabinForm cabinToEddit={cabin} />}
+    </>
   );
 };
 
