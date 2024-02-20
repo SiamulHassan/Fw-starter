@@ -3,6 +3,7 @@ import styled from "styled-components";
 // import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
+import Input from "../../ui/Input";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 
@@ -45,7 +46,7 @@ import { useForm } from "react-hook-form";
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ cabinToEddit = {} }) {
+function CreateCabinForm({ cabinToEddit = {}, onCloseModal }) {
   const { id: cabinToEditID, ...otherCabinVal } = cabinToEddit;
   const fromEditState = Boolean(cabinToEditID);
   const { register, handleSubmit, reset } = useForm({
@@ -72,38 +73,48 @@ function CreateCabinForm({ cabinToEddit = {} }) {
           id: cabinToEditID,
         },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     } else {
       createCabin(
         { ...data, image: image },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     }
   };
   return (
-    <Form onSubmit={handleSubmit(formSubmit)}>
+    // onclose modal thaka mane holo form ta modal er moddhe ache so amar modal type er style apply korbo , ar na takle regular style apply hobe == see form.jsx
+    <Form
+      onSubmit={handleSubmit(formSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
-        <input type="text" id="name" {...register("name")} />
+        <Input type="text" id="name" {...register("name")} />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <input type="number" id="maxCapacity" {...register("maxCapacity")} />
+        <Input type="number" id="maxCapacity" {...register("maxCapacity")} />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="regularPrice">Regular price</Label>
-        <input type="number" id="regularPrice" {...register("regularPrice")} />
+        <Input type="number" id="regularPrice" {...register("regularPrice")} />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="discount">Discount</Label>
-        <input
+        <Input
           type="number"
           id="discount"
           defaultValue={0}
@@ -133,7 +144,13 @@ function CreateCabinForm({ cabinToEddit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button size="btn-large" type="btn-secondary" htmlType="reset">
+        {/* onCloseModal akta func ja form ke close korbe, akhon ai func ta modal er moddhe thaka btn theke astese so ata pabe, but resuse korle form ta jodi modal er moddhe na thake tahole pabe na, so ata conditionally aijonno kora hoise */}
+        <Button
+          size="btn-large"
+          type="btn-secondary"
+          htmlType="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button

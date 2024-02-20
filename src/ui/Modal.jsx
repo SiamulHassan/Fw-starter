@@ -1,4 +1,7 @@
+import { cloneElement, createContext, useContext, useState } from "react";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
+import { HiXMark } from "react-icons/hi2";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +51,45 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+// step 1 - create context
+const ModalContext = createContext();
+//step 2 -- create parent
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+  const close = () => setOpenName("");
+  const open = setOpenName;
+  return (
+    // see my mistake is value () er moddhe pathacchi , so kaj korbe na
+    // <ModalContext.Provider value={(openName, close, setOpenName)}>
+    //   {children}
+    // </ModalContext.Provider>
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+// step 3 create childrens
+function Open({ children, opens: openWindowName }) {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, { onClick: () => open(openWindowName) });
+}
+function Window({ children, name }) {
+  const { openName, close } = useContext(ModalContext);
+  if (name !== openName) return null;
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <Button onClick={close}>
+          <HiXMark />
+        </Button>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+// step 4 -- parent er property hobe child component
+Modal.Open = Open;
+Modal.Window = Window;
+export default Modal;
