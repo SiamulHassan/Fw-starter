@@ -15,15 +15,6 @@ const AddCabin = () => {
       <Modal.Window name="cabin-form">
         <CreateCabinForm />
       </Modal.Window>
-      {/* for showing table modal */}
-      <Modal.Open opens="table">
-        <Button type={"btn-primary"} size={"btn-large"}>
-          Show Table
-        </Button>
-      </Modal.Open>
-      <Modal.Window name="table">
-        <CabinTable />
-      </Modal.Window>
     </Modal>
   );
   // const [isOpenModal, setIsOpenModal] = useState(false);
