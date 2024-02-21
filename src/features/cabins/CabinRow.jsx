@@ -24,6 +24,7 @@ import { useDeleteCabin } from "./useDeleteCabin";
 import { useCreateCabin } from "./useCreateCabin";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import Table from "../../ui/Table";
 const CabinRow = ({ cabin }) => {
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isLoading, createCabin } = useCreateCabin();
@@ -50,7 +51,7 @@ const CabinRow = ({ cabin }) => {
     });
   };
   return (
-    <div role="row" className={styles["table-row"]}>
+    <Table.Row>
       <img src={image} alt="cabin img" className={styles["cabin-img"]} />
       <Cabin>{name}</Cabin>
       <div>Fits up to {maxCapacity} guests</div>
@@ -75,12 +76,12 @@ const CabinRow = ({ cabin }) => {
           </Modal.Window>
         </Modal>
         <Modal>
-          <Modal.Open>
+          <Modal.Open opens="delete">
             <button>
               <HiTrash />
             </button>
           </Modal.Open>
-          <Modal.Window>
+          <Modal.Window name="delete">
             <ConfirmDelete
               resourceName="cabins"
               onConfirm={() => deleteCabin(id)}
@@ -89,7 +90,7 @@ const CabinRow = ({ cabin }) => {
           </Modal.Window>
         </Modal>
       </div>
-    </div>
+    </Table.Row>
   );
 };
 
