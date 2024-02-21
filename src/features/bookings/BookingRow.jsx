@@ -33,7 +33,7 @@ const Amount = styled.div`
   font-family: "Sono";
   font-weight: 500;
 `;
-
+// we are taking booking props and immediately destructing it and about the guests and cabins are also same taking guests and immediately destructing it.
 function BookingRow({
   booking: {
     id: bookingId,
