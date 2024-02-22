@@ -1,12 +1,13 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import { useBookings } from "./useBookings";
+import Pagination from "../../ui/Pagination";
 // import Menus from "../../ui/Menus";
 
 function BookingTable() {
-  const { bookingsData, isLoading } = useBookings();
+  const { bookingsData, isLoading, count } = useBookings();
   // if (!bookingsData.length) return <h3>No bookings data</h3>;
-  //console.log("bdata", bookingsData);
+  // console.log("count", count);
   return (
     // <Menus>
     <Table cols="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
@@ -25,6 +26,9 @@ function BookingTable() {
         data={bookings}
         render={(booking) => <BookingRow key={booking.id} booking={booking} />}
       /> */}
+      <Table.Footer>
+        <Pagination count={count} />
+      </Table.Footer>
     </Table>
     // </Menus>
   );

@@ -1,21 +1,39 @@
+import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings({ filter, sortBy }) {
+export async function getBookings({ filter, sortByFilter, page }) {
   let query = supabase
     .from("bookings")
     .select(
-      "id,created_at,startDate,endDate,numNights,numGuests,status,totalPrice,cabins(name),guests(fullName,email)"
+      "id,created_at,startDate,endDate,numNights,numGuests,status,totalPrice,cabins(name),guests(fullName,email)",
+      {
+        count: "exact",
+      }
     );
-  if (filter !== null) query = query.eq(filter.field, filter.value);
-  const { data, error } = await query;
+  // filter
+  if (filter) query = query.eq(filter.field, filter.value);
+  // sort
+  if (sortByFilter)
+    query = query.order(sortByFilter.field, {
+      ascending: sortByFilter.direction === "asc",
+    });
+  if (page) {
+    // here page means current page we are getting form params
+    // koto thke kotot dekhabe -- same condition like pagination - akhane just supabase(backend) calculation hocche
+    const from = (page - 1) * PAGE_SIZE;
+    // 0-9 == 10 results; 0+pagesize(10)-1 ==> 9; 1+19-1==>19===== 0 based calculation. amra 0-10 dekhacchi but user ke 0+1 kore 1-10 dekhacchi but behind e 0-10
+    const to = from + PAGE_SIZE - 1;
+    query = query.range(from, to);
+  }
 
+  const { data, error, count } = await query;
   if (error) {
     console.error(error);
     throw new Error("Booking could not be loaded");
   }
 
-  return data;
+  return { data, count };
 }
 
 export async function getBooking(id) {

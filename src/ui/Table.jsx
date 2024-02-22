@@ -1,17 +1,18 @@
 import styles from "./Table.module.css";
+import styled from "styled-components";
 import { createContext, useContext } from "react";
 
-// const Footer = styled.footer`
-//   background-color: var(--color-grey-50);
-//   display: flex;
-//   justify-content: center;
-//   padding: 1.2rem;
+const Footer = styled.footer`
+  background-color: var(--color-grey-50);
+  display: flex;
+  justify-content: center;
+  padding: 1.2rem;
 
-//   /* This will hide the footer when it contains no child elements. Possible thanks to the parent selector :has 🎉 */
-//   &:not(:has(*)) {
-//     display: none;
-//   }
-// `;
+  /* This will hide the footer when it contains no child elements. Possible thanks to the parent selector :has 🎉 */
+  &:not(:has(*)) {
+    display: none;
+  }
+`;
 const TableContext = createContext();
 function Table({ cols, children }) {
   return (
@@ -55,4 +56,5 @@ function Row({ children }) {
 }
 Table.Header = Header;
 Table.Row = Row;
+Table.Footer = Footer;
 export default Table;

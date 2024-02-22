@@ -20,7 +20,7 @@ const CabinTable = () => {
       break;
   }
   // sort
-  // here '' for default select will not work, so we gave an actual value
+  // here '' for default select will not work, so we gave an actual value. if confusing lage than defalut hisabe firtst option ke menually select koro
   // amra first filter kori then sei filter er upore base kore sort kori, ata akta sequence er moto
   // ascending means choto thke boro --- so, modifier asc ? tahole 1 return koro means ascending e rakho change koiro na, else -1 means oposite--> asec pele des koro
   // a - b ==> ascending order, creates positive number tai asc hole 1 return kora hocche, ar asc na pele -1 orthat a-b asc pelo but modifier asc na so -1 diye multiply hobe ja revese kore diye descending amader dibe
