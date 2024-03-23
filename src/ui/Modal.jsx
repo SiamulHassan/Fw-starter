@@ -10,6 +10,7 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
 import { useClickOutside } from "../hooks/useClickOutside";
+import CreateCabinForm from "../features/cabins/CreateCabinForm";
 
 const StyledModal = styled.div`
   position: fixed;

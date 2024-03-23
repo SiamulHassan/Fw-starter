@@ -25,8 +25,9 @@ const CabinTable = () => {
   // ascending means choto thke boro --- so, modifier asc ? tahole 1 return koro means ascending e rakho change koiro na, else -1 means oposite--> asec pele des koro
   // a - b ==> ascending order, creates positive number tai asc hole 1 return kora hocche, ar asc na pele -1 orthat a-b asc pelo but modifier asc na so -1 diye multiply hobe ja revese kore diye descending amader dibe
   const sortBy = searchParam.get("sortBy") || "name-asc";
-  const [field, dashDirection] = sortBy.split("-");
-  const modifier = dashDirection === "asc" ? 1 : -1;
+  const [field, sortFieldVal] = sortBy.split("-");
+  const modifier = sortFieldVal === "asc" ? 1 : -1;
+  // a, b holo 2ta cabin object (from filteredCabins), field holo obj er dynamic property ja params thke destructure kore pacchi.
   const sortedCabins = filteredCabins?.sort(
     (a, b) => (a[field] - b[field]) * modifier
   );

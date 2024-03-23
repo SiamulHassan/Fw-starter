@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
-
+import { HiDotsVertical } from "react-icons/hi";
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -53,7 +55,8 @@ function BookingRow({
     "checked-in": "green",
     "checked-out": "silver",
   };
-
+  const [showDetails, setShowDetails] = useState(false);
+  const navigate = useNavigate();
   return (
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
@@ -79,6 +82,49 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
+      <span style={{ position: "relative" }}>
+        <HiDotsVertical
+          style={{ cursor: "pointer", fontSize: "2rem" }}
+          onClick={() => setShowDetails(!showDetails)}
+        />
+        {showDetails && (
+          <>
+            <span
+              onClick={() => navigate(`/bookings/${bookingId}`)}
+              style={{
+                backgroundColor: "var(--color-grey-50)",
+                color: "black",
+                padding: "1rem",
+                position: "absolute",
+                right: "3rem",
+                width: "11rem",
+                borderRadius: "3px",
+                cursor: "pointer",
+              }}
+            >
+              See Details
+            </span>
+            {status === "unconfirmed" && (
+              <span
+                onClick={() => navigate(`/checkin/${bookingId}`)}
+                style={{
+                  backgroundColor: "var(--color-grey-50)",
+                  color: "black",
+                  padding: "1rem",
+                  position: "absolute",
+                  top: "5rem",
+                  right: "3rem",
+                  width: "11rem",
+                  borderRadius: "3px",
+                  cursor: "pointer",
+                }}
+              >
+                Check In
+              </span>
+            )}
+          </>
+        )}
+      </span>
     </Table.Row>
   );
 }

@@ -25,8 +25,8 @@ function Filter({ filterField, options }) {
           key={key}
           onClick={() => handleSearchParam(option.value)}
           className={
-            option.value === activeFilter
-              ? styles.filterBtn + " " + styles.active
+            activeFilter === option.value
+              ? `${styles.filterBtn} ${styles["filterBtn-active"]}`
               : styles.filterBtn
           }
         >

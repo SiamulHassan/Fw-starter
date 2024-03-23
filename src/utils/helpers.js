@@ -20,6 +20,7 @@ export const getToday = function (options = {}) {
   if (options?.end)
     // Set to the last second of the day
     today.setUTCHours(23, 59, 59, 999);
+  // setting the day as the beginning of the day
   else today.setUTCHours(0, 0, 0, 0);
   return today.toISOString();
 };
