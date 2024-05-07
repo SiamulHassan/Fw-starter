@@ -1,4 +1,13 @@
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import styled from "styled-components";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
   /* Box */
@@ -21,42 +30,42 @@ const ChartBox = styled.div`
 const startDataLight = [
   {
     duration: "1 night",
-    value: 0,
+    value: 40,
     color: "#ef4444",
   },
   {
     duration: "2 nights",
-    value: 0,
+    value: 20,
     color: "#f97316",
   },
   {
     duration: "3 nights",
-    value: 0,
+    value: 30,
     color: "#eab308",
   },
   {
     duration: "4-5 nights",
-    value: 0,
+    value: 60,
     color: "#84cc16",
   },
   {
     duration: "6-7 nights",
-    value: 0,
+    value: 100,
     color: "#22c55e",
   },
   {
     duration: "8-14 nights",
-    value: 0,
+    value: 45,
     color: "#14b8a6",
   },
   {
     duration: "15-21 nights",
-    value: 0,
+    value: 80,
     color: "#3b82f6",
   },
   {
     duration: "21+ nights",
-    value: 0,
+    value: 10,
     color: "#a855f7",
   },
 ];
@@ -130,3 +139,48 @@ function prepareData(startData, stays) {
 
   return data;
 }
+const DurationChart = ({ confirmedStays }) => {
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  const data = prepareData(startData, confirmedStays);
+  return (
+    <ChartBox>
+      <h2>Stay duration summary</h2>
+
+      <ResponsiveContainer width="100%" height={240}>
+        <PieChart>
+          {/* nameKey holo category ar datakey holo tar value */}
+          <Pie
+            data={data}
+            nameKey="duration"
+            dataKey="value"
+            innerRadius={80}
+            outerRadius={120}
+            cx="40%"
+            cy="50%"
+            paddingAngle={3}
+          >
+            {data.map((entry) => (
+              <Cell
+                fill={entry.color}
+                stroke={entry.color}
+                key={entry.duration}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          {/* legend shows what each category (color) means */}
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            width="30%"
+            layout="vertical"
+            iconSize={15}
+            iconType="circle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+};
+export default DurationChart;
